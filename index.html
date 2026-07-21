@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="A 72-question Enneagram personality test that maps you to one of the nine types, with your wing, growth and stress directions, center of intelligence, and a full ranked profile.">
+<title>The Enneagram: Nine Ways of Seeing</title>
+<style>
+  :root {
+    --bg: #f4efe6;
+    --surface: #fbf8f2;
+    --surface-2: #efe8db;
+    --ink: #2a2431;
+    --muted: #746a7d;
+    --line: #e2dacb;
+    --line-strong: #d3c8b4;
+    --accent: #a67c34;
+    --accent-soft: #c9a55f;
+    --accent-wash: #f0e6d2;
+    --shadow: 0 1px 2px rgba(42,36,49,.05), 0 8px 30px rgba(42,36,49,.07);
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: "SF Mono", ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #171420;
+      --surface: #201b2b;
+      --surface-2: #262032;
+      --ink: #ece7f0;
+      --muted: #a096ab;
+      --line: #322a40;
+      --line-strong: #423752;
+      --accent: #d4ac68;
+      --accent-soft: #e0be82;
+      --accent-wash: #2a2233;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 40px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f4efe6; --surface: #fbf8f2; --surface-2: #efe8db; --ink: #2a2431;
+    --muted: #746a7d; --line: #e2dacb; --line-strong: #d3c8b4; --accent: #a67c34;
+    --accent-soft: #c9a55f; --accent-wash: #f0e6d2;
+    --shadow: 0 1px 2px rgba(42,36,49,.05), 0 8px 30px rgba(42,36,49,.07);
+  }
+  :root[data-theme="dark"] {
+    --bg: #171420; --surface: #201b2b; --surface-2: #262032; --ink: #ece7f0;
+    --muted: #a096ab; --line: #322a40; --line-strong: #423752; --accent: #d4ac68;
+    --accent-soft: #e0be82; --accent-wash: #2a2233;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 40px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    font-size: 17px;
+    letter-spacing: -0.003em;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+
+  /* ---- Masthead ---- */
+  header.mast {
+    display: flex; align-items: center; gap: 12px;
+    padding: 22px 0 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .mast-mark { width: 30px; height: 30px; flex: none; color: var(--accent); }
+  .mast-title {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--muted); font-weight: 500;
+  }
+
+  section.screen { padding: 40px 0 72px; display: none; }
+  section.screen.active { display: block; animation: fade .5s ease both; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* ---- Intro ---- */
+  .figure-hero { display: flex; justify-content: center; margin: 6px 0 30px; }
+  .figure-hero svg { width: min(340px, 76vw); height: auto; }
+  h1 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: clamp(2.2rem, 6.5vw, 3.4rem); line-height: 1.05;
+    letter-spacing: -0.02em; text-wrap: balance; text-align: center;
+    margin: 0 0 6px;
+  }
+  .subtitle {
+    text-align: center; color: var(--muted); font-family: var(--serif);
+    font-style: italic; font-size: 1.2rem; margin: 0 auto 30px; max-width: 30ch;
+    text-wrap: balance;
+  }
+  .lead { max-width: 60ch; margin: 0 auto 20px; text-align: center; color: var(--ink); }
+  .lead.sub { color: var(--muted); font-size: 15.5px; margin-bottom: 30px; }
+  .meta-row {
+    display: flex; justify-content: center; gap: 28px; flex-wrap: wrap;
+    margin: 0 0 34px; font-family: var(--mono); font-size: 12px;
+    letter-spacing: .04em; color: var(--muted);
+  }
+  .meta-row b { color: var(--ink); font-weight: 600; }
+  .center { text-align: center; }
+
+  .btn {
+    font-family: var(--sans); font-size: 15px; font-weight: 600;
+    border: none; cursor: pointer; border-radius: 999px;
+    padding: 14px 30px; transition: transform .15s ease, background .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease;
+    letter-spacing: .01em;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    box-shadow: 0 4px 16px rgba(166,124,52,.28);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(166,124,52,.36); }
+  .btn-ghost {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--line-strong);
+  }
+  .btn-ghost:hover { color: var(--ink); border-color: var(--accent); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ---- Quiz ---- */
+  .progress-shell { margin: 4px 0 34px; }
+  .progress-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .06em;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .progress-head b { color: var(--accent); }
+  .progress-track { height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width .35s cubic-bezier(.4,0,.2,1); }
+
+  .q-card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 18px; padding: 40px 34px 30px; box-shadow: var(--shadow);
+  }
+  .q-index { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .1em; margin-bottom: 18px; }
+  .q-text {
+    font-family: var(--serif); font-size: clamp(1.35rem, 4.2vw, 1.72rem);
+    line-height: 1.32; letter-spacing: -0.01em; text-wrap: balance;
+    margin: 0 0 30px; min-height: 2.6em;
+  }
+  .scale { display: flex; flex-direction: column; gap: 9px; }
+  .opt {
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    text-align: left; background: var(--surface-2); border: 1px solid transparent;
+    color: var(--ink); font-family: var(--sans); font-size: 15px; font-weight: 500;
+    padding: 13px 16px; border-radius: 11px; cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  .opt:hover { border-color: var(--accent-soft); transform: translateX(2px); }
+  .opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .opt.chosen { background: var(--accent-wash); border-color: var(--accent); }
+  .opt-key {
+    font-family: var(--mono); font-size: 12px; width: 22px; height: 22px; flex: none;
+    display: grid; place-items: center; border-radius: 6px;
+    background: var(--surface); border: 1px solid var(--line-strong); color: var(--muted);
+  }
+  .opt.chosen .opt-key { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .opt-dot {
+    margin-left: auto; width: 12px; height: 12px; border-radius: 50%; flex: none;
+    border: 2px solid var(--line-strong);
+  }
+  .opt.chosen .opt-dot { border-color: var(--accent); background: var(--accent); box-shadow: 0 0 0 3px var(--accent-wash); }
+
+  .q-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; }
+  .q-nav .hint { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .04em; }
+  .link-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-family: var(--sans); font-size: 14px; padding: 6px 4px; }
+  .link-btn:hover { color: var(--accent); }
+  .link-btn:disabled { opacity: 0; pointer-events: none; }
+
+  /* ---- Results ---- */
+  .res-head { text-align: center; margin-bottom: 8px; }
+  .res-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  .res-figure { display: flex; justify-content: center; margin: 18px 0 26px; }
+  .res-figure svg { width: min(300px, 72vw); height: auto; }
+  .res-type-num { font-family: var(--serif); font-size: clamp(3.2rem,12vw,5rem); line-height: 1; color: var(--accent); font-weight: 600; }
+  h2.res-name { font-family: var(--serif); font-weight: 600; font-size: clamp(1.9rem,5.5vw,2.6rem); letter-spacing: -0.02em; margin: 4px 0 2px; text-wrap: balance; }
+  .res-tagline { color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 1.15rem; margin: 0 0 8px; }
+  .pill-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+  .res-wing { display: inline-block; font-family: var(--mono); font-size: 12px; letter-spacing: .05em; color: var(--accent); background: var(--accent-wash); border: 1px solid var(--accent-soft); padding: 4px 12px; border-radius: 999px; }
+  .res-wing.alt { color: var(--muted); background: var(--surface-2); border-color: var(--line-strong); }
+
+  .res-body { max-width: 60ch; margin: 26px auto; }
+  .res-body p { margin: 0 0 16px; }
+
+  .traits { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 22px 0 8px; }
+  .trait { font-size: 13px; font-weight: 500; color: var(--ink); background: var(--surface-2); border: 1px solid var(--line); padding: 5px 13px; border-radius: 999px; }
+
+  .prose-block { max-width: 60ch; margin: 20px auto; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 12px; padding: 20px 22px; }
+  .prose-block.challenge { border-left-color: var(--line-strong); }
+  .prose-block p { margin: 0; }
+  .pb-label { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .prose-block.challenge .pb-label { color: var(--muted); }
+
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 28px auto; max-width: 60ch; }
+  @media (max-width: 540px) { .card-grid { grid-template-columns: 1fr; } }
+  .info-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .info-card .lab { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .info-card .val { font-family: var(--serif); font-size: 1.05rem; line-height: 1.4; }
+  .info-card .val .arrow { color: var(--accent); font-weight: 600; }
+
+  .section-label { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 40px 0 16px; text-align: center; }
+
+  .center-card { max-width: 60ch; margin: 0 auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; }
+  .cc-name { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 6px; }
+  .center-card p { margin: 0; }
+
+  .growth-list { max-width: 60ch; margin: 0 auto; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; counter-reset: gl; }
+  .growth-list li { display: flex; gap: 14px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .growth-list li::before { content: counter(gl); counter-increment: gl; font-family: var(--mono); font-size: 12px; color: var(--accent); background: var(--accent-wash); border: 1px solid var(--accent-soft); width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+
+  details.glossary { max-width: 60ch; margin: 36px auto 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  details.glossary summary { cursor: pointer; padding: 16px 0; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  details.glossary summary::-webkit-details-marker { display: none; }
+  details.glossary summary::after { content: "+"; color: var(--accent); font-size: 16px; }
+  details.glossary[open] summary::after { content: "\2013"; }
+  details.glossary summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .gloss-body { padding: 0 0 18px; }
+  .gloss-body p { margin: 0 0 12px; font-size: 15px; }
+  .gloss-body p:last-child { margin: 0; }
+
+  .rank { display: flex; flex-direction: column; gap: 4px; max-width: 60ch; margin: 0 auto; }
+  .rank-row { display: grid; grid-template-columns: 26px 1fr 46px; align-items: center; gap: 14px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .rank-row:last-child { border-bottom: none; }
+  .rank-num { font-family: var(--mono); font-size: 14px; color: var(--muted); text-align: right; }
+  .rank-row.top .rank-num { color: var(--accent); font-weight: 700; }
+  .rank-body { min-width: 0; }
+  .rank-name { font-size: 14px; font-weight: 600; margin-bottom: 5px; display: flex; gap: 8px; align-items: baseline; }
+  .rank-name small { color: var(--muted); font-weight: 400; font-family: var(--serif); font-style: italic; }
+  .bar-track { height: 6px; background: var(--line); border-radius: 6px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--line-strong); border-radius: 6px; width: 0; transition: width .8s cubic-bezier(.2,.7,.2,1); }
+  .rank-row.top .bar-fill { background: var(--accent); }
+  .rank-pct { font-family: var(--mono); font-size: 13px; color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; }
+  .rank-row.top .rank-pct { color: var(--ink); }
+
+  .disclaimer { max-width: 56ch; margin: 40px auto 26px; text-align: center; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+  .res-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+
+  .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); background: var(--ink); color: var(--bg); font-size: 14px; font-weight: 500; padding: 12px 20px; border-radius: 999px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; z-index: 50; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  footer.foot { border-top: 1px solid var(--line); padding: 26px 0 40px; text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
+
+  /* enneagram svg element styling */
+  .enn-ring { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
+  .enn-web { fill: none; stroke: var(--line-strong); stroke-width: 1.2; }
+  .enn-web.hot { stroke: var(--accent); stroke-width: 1.8; }
+  .enn-dot { fill: var(--surface); stroke: var(--line-strong); stroke-width: 1.5; }
+  .enn-dot.on { fill: var(--accent); stroke: var(--accent); }
+  .enn-label { font-family: var(--mono); font-size: 13px; fill: var(--muted); text-anchor: middle; dominant-baseline: central; }
+  .enn-label.on { fill: #fff; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <svg class="mast-mark" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="3"/>
+      <polygon points="50,10 78,74 22,74" fill="none" stroke="currentColor" stroke-width="3"/>
+      <polygon points="50,10 84,42 71,84 29,84 16,42" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>
+    </svg>
+    <span class="mast-title">A Map of Nine Types</span>
+  </header>
+
+  <!-- INTRO -->
+  <section class="screen active" id="s-intro">
+    <div class="figure-hero" id="hero-fig"></div>
+    <h1>The Enneagram</h1>
+    <p class="subtitle">Nine ways of paying attention to the world.</p>
+    <p class="lead">The Enneagram sorts people into nine types. Your type has less to do with what you do than with <em>why</em> you do it. Read it as a mirror and answer honestly about who you actually are these days. Watch for the pattern that keeps ringing true.</p>
+    <p class="lead sub">When you finish, read the top two or three types together. Most of us are a blend, and the runner-up can tell you as much about yourself as the type that came out on top.</p>
+    <div class="meta-row">
+      <span><b>72</b> statements</span>
+      <span><b>9</b> types</span>
+      <span><b>~10</b> minutes</span>
+    </div>
+    <div class="center">
+      <button class="btn btn-primary" id="start-btn">Begin the test →</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="s-quiz">
+    <div class="progress-shell">
+      <div class="progress-head">
+        <span>Statement <b id="p-cur">1</b> of 72</span>
+        <span id="p-pct">1%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="p-fill"></div></div>
+    </div>
+    <div class="q-card">
+      <div class="q-index" id="q-index">01 / 72</div>
+      <p class="q-text" id="q-text">—</p>
+      <div class="scale" id="scale"></div>
+      <div class="q-nav">
+        <button class="link-btn" id="back-btn">← Back</button>
+        <span class="hint">Tap a choice, or press <b>1</b>–<b>5</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="screen" id="s-results">
+    <div class="res-head">
+      <div class="res-eyebrow">Your dominant type</div>
+      <div class="res-type-num" id="r-num">—</div>
+      <h2 class="res-name" id="r-name">—</h2>
+      <p class="res-tagline" id="r-tag">—</p>
+      <div class="pill-row">
+        <span class="res-wing" id="r-wing">—</span>
+        <span class="res-wing alt" id="r-center">—</span>
+      </div>
+    </div>
+    <div class="res-figure" id="res-fig"></div>
+    <div class="traits" id="r-traits"></div>
+    <div class="res-body" id="r-desc"></div>
+
+    <div class="prose-block">
+      <div class="pb-label">At your best</div>
+      <p id="r-best">—</p>
+    </div>
+    <div class="prose-block challenge">
+      <div class="pb-label">Your core challenge</div>
+      <p id="r-challenge">—</p>
+    </div>
+
+    <div class="card-grid">
+      <div class="info-card"><div class="lab">Core desire</div><div class="val" id="r-desire">—</div></div>
+      <div class="info-card"><div class="lab">Core fear</div><div class="val" id="r-fear">—</div></div>
+      <div class="info-card"><div class="lab">In growth</div><div class="val" id="r-growth">—</div></div>
+      <div class="info-card"><div class="lab">Under stress</div><div class="val" id="r-stress">—</div></div>
+    </div>
+
+    <div class="section-label">Your center of intelligence</div>
+    <div class="center-card">
+      <div class="cc-name" id="r-center-name">—</div>
+      <p id="r-center-blurb">—</p>
+    </div>
+
+    <div class="section-label">Your path of growth</div>
+    <ul class="growth-list" id="r-growth-list"></ul>
+
+    <details class="glossary">
+      <summary>What wings, arrows &amp; centers mean</summary>
+      <div class="gloss-body" id="r-gloss"></div>
+    </details>
+
+    <div class="section-label">All nine types, ranked</div>
+    <div class="rank" id="r-rank"></div>
+
+    <p class="disclaimer">The Enneagram is a mirror for reflection, not a diagnosis. A questionnaire can only point in a direction. The surest way to find your type is to read the two or three that scored highest and notice which core motivation you recognize from the inside.</p>
+    <div class="res-actions">
+      <button class="btn btn-primary" id="share-btn">Share result</button>
+      <button class="btn btn-ghost" id="download-btn">Download report</button>
+      <button class="btn btn-ghost" id="retake-btn">Take it again</button>
+    </div>
+  </section>
+
+  <footer class="foot">Enneagram Self-Assessment · For reflection, not diagnosis</footer>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Centers of intelligence ----------
+  var CENTERS = {
+    Body: { members: "8 · 9 · 1", emotion: "anger", blurb: "The Body, or Gut, Center. Types 8, 9, and 1 meet the world through instinct, and underneath they all wrestle with anger and control. The Eight pushes it outward, the Nine falls asleep to it, and the One holds it in and turns it on themselves. The question at the center is about boundaries and personal power." },
+    Heart: { members: "2 · 3 · 4", emotion: "shame", blurb: "The Heart, or Feeling, Center. Types 2, 3, and 4 filter the world through emotion and self-image, and they share a struggle with shame and the question of who they are. The Two answers it by turning toward other people, the Three by achieving, and the Four by turning inward. The question at the center is about identity and worth." },
+    Head: { members: "5 · 6 · 7", emotion: "fear", blurb: "The Head, or Thinking, Center. Types 5, 6, and 7 process the world through the mind, and they share a running relationship with fear and anxiety. The Five meets it by withdrawing to understand, the Six by seeking security, and the Seven by scattering toward the next good possibility. The question at the center is about safety and guidance." }
+  };
+
+  // ---------- Type data ----------
+  var TYPES = {
+    1: { name: "The Reformer", tag: "The principled perfectionist", center: "Body",
+      traits: ["Principled","Purposeful","Self-controlled","Discerning"],
+      desire: "To have integrity and be good", fear: "Being corrupt or fundamentally flawed",
+      growth: 7, stress: 4,
+      desc: ["Ones carry a strong inner compass and a conviction that things can be better than they are. You see the gap between how the world is and how it ought to be, and you feel responsible for closing it. That's where your integrity and your discipline come from.",
+             "The hard part is the inner critic that never clocks out. The same standard that makes you dependable can curdle into resentment and rigidity, and you forgive your own mistakes last of all. Anger you think you shouldn't feel gets pushed down until it leaks out as criticism and tension."],
+      best: "At your best you make peace with how things are while still working to improve them. You grow patient and steady, you hold your standards without the harsh edge, and you stop believing the whole world rests on your shoulders.",
+      challenge: "Your blind spot is the belief that there's one right way, and that relaxing your standards means letting everyone down. The heaviest thing you carry is resentment, at people who don't try as hard and at yourself for never quite measuring up. Things ease up when 'good enough' stops feeling like failure and starts feeling like relief.",
+      growthPath: [
+        "When the inner critic speaks up, ask whether its standard is actually fair or just loud.",
+        "Put real rest on the calendar and protect it, even when the work isn't finished.",
+        "Let one imperfect thing stand, and notice that the sky doesn't fall." ] },
+    2: { name: "The Helper", tag: "The caring giver", center: "Heart",
+      traits: ["Generous","Warm","Attentive","Sacrificial"],
+      desire: "To feel loved and wanted", fear: "Being unwanted or unworthy of love",
+      growth: 4, stress: 8,
+      desc: ["Twos move toward people. You pick up on what someone needs, often before they've said a word, and your instinct is to go meet that need. At your warmest you're the person who makes others feel genuinely seen and cared for.",
+             "The cost is that your own needs go unspoken and unmet. When you give in the hope of being loved back and it doesn't come, the giving can sour into over-involvement or a quiet resentment you'd never admit."],
+      best: "At your best you love people without keeping a ledger. You know you're worth something apart from how useful you are, so your generosity comes free of strings, and you even let yourself be loved for who you are and not only for what you hand out.",
+      challenge: "Your blind spot is your own needs. Staying focused on everyone else lets you dodge a harder admission, that you need things too. A quiet pride likes being the one who helps and hates being the one who asks. When your care goes unreturned it can harden into martyrdom or something close to manipulation. The real work is believing you're worth loving before you've done a thing to earn it.",
+      growthPath: [
+        "Name one of your own needs each day and ask for it straight out, no hinting.",
+        "Catch yourself helping in order to be loved back, and let a few kindnesses be free.",
+        "Practice receiving. Take the compliment or the help without deflecting it." ] },
+    3: { name: "The Achiever", tag: "The driven performer", center: "Heart",
+      traits: ["Adaptable","Ambitious","Energetic","Image-aware"],
+      desire: "To feel valuable and worthwhile", fear: "Being worthless apart from achievement",
+      growth: 6, stress: 9,
+      desc: ["Threes are wired for success. You set a goal, read the room, and become whatever the moment rewards. People are drawn to your drive and to the sense that you'll actually get it done.",
+             "The trap is mistaking the image for the real thing. When your worth rides entirely on what you achieve, you lose track of what you actually feel and want underneath the performance, and failure starts to feel like the end of the world."],
+      best: "At your best you've stopped performing and become the real thing. You still have all that drive, but you aim it at goals that matter past your own image, and you let people see the version of you that isn't polished for the room.",
+      challenge: "Your blind spot is the distance between the image and the heart. In the rush to win you lose contact with your own feelings and start reading applause as love. Failure feels unbearable, so you keep moving and never sit still long enough for real feeling to surface. What you're missing is that people can value you for who you are and not only for what you produce.",
+      growthPath: [
+        "Block off time with nothing to produce, and let yourself just be there.",
+        "Ask what you actually want, setting aside whatever would look impressive.",
+        "Tell someone about a struggle before you've solved it and packaged it up." ] },
+    4: { name: "The Individualist", tag: "The sensitive romantic", center: "Heart",
+      traits: ["Expressive","Authentic","Introspective","Deep-feeling"],
+      desire: "To be authentically themselves", fear: "Having no identity or significance",
+      growth: 1, stress: 2,
+      desc: ["Fours feel life at a deeper register. You're drawn to beauty and emotional honesty, and you have no patience for the shallow or the fake. It gives you real creativity and a rare ability to sit with someone in their pain without flinching.",
+             "The undertow is a feeling that something essential is missing, like everyone else got a manual you never received. Longing for what's absent pulls you into melancholy and envy, and it keeps the connection you want most just out of reach."],
+      best: "At your best you turn your depth into something beautiful and stay fully present with people who are hurting. You're settled in who you are without needing to prove you're different, and you start finding the extraordinary tucked inside ordinary days.",
+      challenge: "Your blind spot is the story that you're missing something everyone else was handed. Fixed on what's absent, you overlook the plain good already in your hands, and the longing itself can quietly start to feel like home. Envy holds the very closeness you want at arm's length. Things shift when you stop waiting to feel whole and notice how much is already here.",
+      growthPath: [
+        "When you feel the pull toward what's missing, name a few good things that are already here.",
+        "Act before the feeling is perfect, instead of waiting for the mood to line up.",
+        "Let some days be plain and ordinary without reading that as failure." ] },
+    5: { name: "The Investigator", tag: "The perceptive observer", center: "Head",
+      traits: ["Perceptive","Inventive","Independent","Cerebral"],
+      desire: "To be capable and competent", fear: "Being helpless or overwhelmed",
+      growth: 8, stress: 7,
+      desc: ["Fives pull back in order to understand. You guard your energy, watch from a little distance, and build a rich inner world of knowledge. You're the calm, perceptive one who actually understands how the thing works.",
+             "The risk is pulling back so far that life happens without you. Guarding your resources tips into detachment, and thinking quietly becomes a substitute for living."],
+      best: "At your best you see what everyone else misses and you step into the world with confidence. You share your inner life freely, trusting there's enough of you to go around, and you let yourself join in rather than only watch.",
+      challenge: "Your blind spot is the belief that you have to fully understand something before you can act on it or belong to it. Pulling back to save energy slides into isolation, and you end up living in your head while your body and your heart wait outside. You hoard your time and energy against a scarcity that feels more real than it is.",
+      growthPath: [
+        "Try moving before you fully understand, and commit to something before you feel ready.",
+        "Give away your time and energy in small doses and watch yourself not run empty.",
+        "Get out of your head and into your body, and let an experience just happen to you." ] },
+    6: { name: "The Loyalist", tag: "The committed skeptic", center: "Head",
+      traits: ["Loyal","Responsible","Vigilant","Engaging"],
+      desire: "To have security and support", fear: "Being without support or guidance",
+      growth: 9, stress: 3,
+      desc: ["Sixes scan for what could go wrong so the people they love stay safe. You're loyal and responsible, and you're quick to spot the flaw everyone else talked right past. Once someone earns your trust, it runs deep.",
+             "The engine underneath is anxiety, and it swings between doubting authority and badly wanting it. Your mind cooks up worst cases faster than the world can hand them to you."],
+      best: "At your best you've learned to trust your own read on things, and it makes you steady and genuinely brave. All that watchfulness matures into wisdom, and you meet uncertainty with a settled calm that becomes a kind of shelter for the people around you.",
+      challenge: "Your blind spot is your own inner authority. Doubt sends you looking outside yourself for reassurance, and then you doubt the reassurance too. The fear never fully clears. What grows over time is your willingness to move anyway, trusting you can handle whatever actually shows up.",
+      growthPath: [
+        "Sort the danger that's real and here from the one your mind is imagining, and act only on the first.",
+        "Follow one of your own decisions all the way through without asking around for reassurance.",
+        "When the anxiety spikes, come back to what's actually, physically true right now." ] },
+    7: { name: "The Enthusiast", tag: "The spontaneous visionary", center: "Head",
+      traits: ["Spontaneous","Optimistic","Versatile","Curious"],
+      desire: "To be satisfied and content", fear: "Being trapped in pain or deprivation",
+      growth: 5, stress: 1,
+      desc: ["Sevens chase the bright horizon. You're quick and curious and full of plans, always keeping the options open and turning setbacks into the next possibility. Your energy is contagious, and you remind everyone that life is actually meant to be enjoyed.",
+             "The shadow is avoidance. Staying busy and upbeat is often a way of outrunning pain, and keeping every option open stops you from committing to any one thing deeply."],
+      best: "At your best you actually savor your life because you're present for it instead of racing to the next thing. You go deep on a few things you've chosen, and your enthusiasm turns into real contentment that isn't running from anything.",
+      challenge: "Your blind spot is the pain you keep outrunning. Keeping your options open and your mood high is a way to dodge limits and hurt, but all that reaching keeps you from the depth that would actually satisfy you. The freedom you're after shows up once you finally choose one thing and stay.",
+      growthPath: [
+        "Sit with a hard feeling for a few minutes before you reframe it or run.",
+        "Finish one thing before you let yourself start the next exciting one.",
+        "Practice 'enough,' and notice when what's already in front of you is plenty." ] },
+    8: { name: "The Challenger", tag: "The protective powerhouse", center: "Body",
+      traits: ["Decisive","Direct","Protective","Willful"],
+      desire: "To protect themselves and control their own life", fear: "Being controlled or harmed",
+      growth: 2, stress: 5,
+      desc: ["Eights meet life head-on. You're strong and direct, you don't flinch at conflict, and your instinct is to take charge and cover the people who can't cover themselves. Folks feel safer with you in the room.",
+             "The armor is the issue. Refusing to look weak can harden into domination, and intensity can steamroll the very people you care about."],
+      best: "At your best you use all that strength to lift people up instead of pushing them around, and you know when to hold it back. You let people see the tender heart under the armor, and your power turns into shelter, including for the softer places inside you.",
+      challenge: "Your blind spot is the idea that being vulnerable means being weak. The armor that keeps you safe also keeps you alone, and the intensity you use to stay in control can flatten the people you love most. Under all that toughness is a big heart that's scared of being betrayed or controlled, and letting it show takes more strength than hiding it ever did.",
+      growthPath: [
+        "Let someone in on a fear or a soft feeling before you armor it over.",
+        "Pause before you push, and ask whether force is really needed here.",
+        "Catch yourself steamrolling, and make room for someone else's strength." ] },
+    9: { name: "The Peacemaker", tag: "The easygoing mediator", center: "Body",
+      traits: ["Receptive","Steady","Accepting","Reassuring"],
+      desire: "Inner and outer peace and harmony", fear: "Loss and separation",
+      growth: 3, stress: 6,
+      desc: ["Nines are the world's mediators. You can see every side, you put people at ease, and you have a gift for lowering the temperature in a room. Steady and easy to be around, you're the settled center that holds a group together.",
+             "The danger is disappearing into all that harmony. To keep the peace you go along and numb out, and you lose track of your own priorities until you honestly can't say what you want."],
+      best: "At your best you're a real peacemaker, present and engaged and no longer just dodging conflict. You know your own mind and you act on it, and your steadiness becomes something you offer on purpose instead of a place to hide.",
+      challenge: "Your blind spot is your own presence. To keep the peace you blend into other people and fall asleep to your own priorities, until you can't say what you want. The anger you avoid doesn't disappear. It settles in as stubbornness and quiet withdrawal. The peace worth having comes once you actually show up.",
+      growthPath: [
+        "Name what you want in a situation before you default to what everyone else wants.",
+        "Take on one small tension head-on instead of smoothing it over.",
+        "Catch yourself drifting, pick one thing that matters, and move on it." ] }
+  };
+
+  // 8 statements per type, keyed by type
+  var STATEMENTS = {
+    1: [
+      "I have a strong inner sense of right and wrong, and it bothers me when things fall short of it.",
+      "I notice mistakes and imperfections that other people seem to overlook.",
+      "I hold myself to high standards and feel guilty when I don't meet them.",
+      "I believe there is usually a correct, proper way to do things.",
+      "I work hard to improve myself and the world around me.",
+      "It's hard for me to relax when there's still work to be done or something feels out of place.",
+      "I often hear a critical inner voice pointing out where I've fallen short.",
+      "I try to be fair, honest, and responsible in everything I do." ],
+    2: [
+      "I can sense what other people need, sometimes before they realize it themselves.",
+      "I feel most valued when I'm being genuinely helpful to someone.",
+      "I have a hard time saying no when someone asks me for help.",
+      "I want to be seen as a caring and generous person.",
+      "I sometimes neglect my own needs while tending to everyone else's.",
+      "I feel hurt when my care for someone goes unnoticed or unappreciated.",
+      "I find it easier to focus on other people's feelings than to name my own.",
+      "Being needed by the people I love matters a great deal to me." ],
+    3: [
+      "I'm driven to succeed and to be recognized for what I accomplish.",
+      "I adjust how I present myself depending on who I'm trying to impress.",
+      "I tend to measure my own worth by what I achieve.",
+      "I stay busy and productive, and I dislike wasting time.",
+      "I'm good at setting goals and doing whatever it takes to reach them.",
+      "I dislike failing in public, and I work hard to avoid it.",
+      "I can set my feelings aside to get the job done.",
+      "I naturally step into leadership and want to be the best at what I do." ],
+    4: [
+      "I often feel that something essential is missing from my life.",
+      "I want to be unique and to express who I truly am.",
+      "My emotions run deep, and I'm drawn to beauty and melancholy.",
+      "I sometimes envy the qualities or the lives that other people seem to have.",
+      "I often feel misunderstood, as though others can't grasp my inner world.",
+      "Ordinary routine can leave me feeling flat; I crave depth and meaning.",
+      "I'm very aware of my feelings and tend to dwell inside them.",
+      "I'd rather be authentic and different than fit in and feel ordinary." ],
+    5: [
+      "I need plenty of private time alone to recharge and think.",
+      "I prefer to observe and understand a situation before I join in.",
+      "I feel most secure once I've gathered enough knowledge and information.",
+      "I guard my time and energy carefully and dislike intrusions on them.",
+      "I'd rather be self-sufficient than have to depend on other people.",
+      "Too much social contact drains me, and I need to withdraw to refill.",
+      "I collect knowledge and skills so that I'll feel prepared and capable.",
+      "I keep my emotions private and tend to process them on my own." ],
+    6: [
+      "I tend to anticipate what could go wrong so I can be prepared for it.",
+      "I value loyalty and security, and I'm faithful to the people I trust.",
+      "I often question authority and second-guess my own decisions.",
+      "When facing uncertainty, I look for reassurance and support.",
+      "My mind frequently scans for potential problems or threats.",
+      "I feel more at ease once I know who and what I can rely on.",
+      "I can be loyal to a group and quietly suspicious of it at the same time.",
+      "I tend to play out worst-case scenarios in my head before I act." ],
+    7: [
+      "I love dreaming up new experiences and keeping my options open.",
+      "I get bored easily and crave variety and stimulation.",
+      "I'm an optimist who can usually find the bright side of things.",
+      "I fear missing out, so I like to keep lots of possibilities alive.",
+      "I tend to stay busy and upbeat to steer away from painful feelings.",
+      "When something turns painful, my instinct is to pivot to something more fun.",
+      "I have far more ideas and plans than I could ever follow through on.",
+      "I hate feeling confined, bored, or stuck in a limited routine." ],
+    8: [
+      "I'm comfortable taking charge and being in control of a situation.",
+      "I say what I think directly, even if it ruffles some feathers.",
+      "I instinctively step in to protect people who are being treated unfairly.",
+      "I dislike showing vulnerability or appearing weak to others.",
+      "I have a lot of energy and can be confrontational when I need to be.",
+      "People tend to experience me as strong, blunt, or intense.",
+      "I'd rather be in control than risk being at someone else's mercy.",
+      "I respect people who can stand up to me and push back." ],
+    9: [
+      "I'll often go along with others just to keep the peace.",
+      "I can easily see and appreciate all sides of an argument.",
+      "I tend to put off decisions and let things take their own course.",
+      "I long for harmony and comfort, and I dislike tension.",
+      "I sometimes lose track of my own priorities and what I really want.",
+      "I find it easy to adopt other people's agendas and hard to assert my own.",
+      "I'd rather distract or numb myself than face a conflict head-on.",
+      "I have a calming presence that helps settle tension around me." ]
+  };
+
+  // Build the question list, round-robin across types so no two neighbors share a type
+  var QUESTIONS = [];
+  for (var round = 0; round < 8; round++) {
+    for (var t = 1; t <= 9; t++) {
+      QUESTIONS.push({ t: t, s: STATEMENTS[t][round] });
+    }
+  }
+  var TOTAL = QUESTIONS.length;       // 72
+  var PER_TYPE = 8;
+  var MAX_RAW = PER_TYPE * 5;         // 40
+
+  var SCALE = [
+    { k: 1, label: "Strongly disagree" },
+    { k: 2, label: "Disagree" },
+    { k: 3, label: "Neutral / mixed" },
+    { k: 4, label: "Agree" },
+    { k: 5, label: "Strongly agree" }
+  ];
+
+  var answers = new Array(TOTAL).fill(null);
+  var idx = 0;
+  var current = null; // { top, ranked, totals, wing, wingLabel }
+
+  // ---------- Enneagram figure ----------
+  function pointPos(num, cx, cy, r) {
+    var k = num % 9;            // 9 -> 0 (top); 1..8 keep
+    var ang = (-90 + 40 * k) * Math.PI / 180;
+    return [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
+  }
+  var TRIANGLE = [9, 3, 6, 9];
+  var HEXAD = [1, 4, 2, 8, 5, 7, 1];
+
+  function drawEnneagram(highlight) {
+    var S = 240, cx = S / 2, cy = S / 2, r = S / 2 - 26;
+    var svg = ['<svg viewBox="0 0 ' + S + ' ' + S + '" role="img" aria-label="Enneagram figure">'];
+    svg.push('<circle class="enn-ring" cx="' + cx + '" cy="' + cy + '" r="' + r + '"/>');
+
+    function pathFor(seq) {
+      var d = seq.map(function (n, i) {
+        var p = pointPos(n, cx, cy, r);
+        return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1);
+      }).join(" ");
+      return '<path class="enn-web" d="' + d + '"/>';
+    }
+    svg.push(pathFor(TRIANGLE));
+    svg.push(pathFor(HEXAD));
+
+    if (highlight) {
+      var seg = function (a, b) {
+        var pa = pointPos(a, cx, cy, r), pb = pointPos(b, cx, cy, r);
+        svg.push('<path class="enn-web hot" d="M' + pa[0].toFixed(1) + ' ' + pa[1].toFixed(1) + 'L' + pb[0].toFixed(1) + ' ' + pb[1].toFixed(1) + '"/>');
+      };
+      seg(highlight, TYPES[highlight].growth);
+      seg(highlight, TYPES[highlight].stress);
+    }
+
+    for (var n = 1; n <= 9; n++) {
+      var p = pointPos(n, cx, cy, r);
+      var on = (n === highlight);
+      svg.push('<circle class="enn-dot' + (on ? " on" : "") + '" cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="' + (on ? 15 : 12) + '"/>');
+      svg.push('<text class="enn-label' + (on ? " on" : "") + '" x="' + p[0].toFixed(1) + '" y="' + p[1].toFixed(1) + '">' + n + '</text>');
+    }
+    svg.push('</svg>');
+    return svg.join("");
+  }
+
+  // ---------- Screen control ----------
+  function show(id) {
+    var scr = document.querySelectorAll(".screen");
+    for (var i = 0; i < scr.length; i++) scr[i].classList.remove("active");
+    document.getElementById(id).classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // ---------- Quiz render ----------
+  var qText = document.getElementById("q-text");
+  var qIndex = document.getElementById("q-index");
+  var scaleEl = document.getElementById("scale");
+  var pCur = document.getElementById("p-cur");
+  var pPct = document.getElementById("p-pct");
+  var pFill = document.getElementById("p-fill");
+  var backBtn = document.getElementById("back-btn");
+
+  function pad2(n) { return String(n).length < 2 ? "0" + n : String(n); }
+
+  function renderQuestion() {
+    var q = QUESTIONS[idx];
+    qIndex.textContent = pad2(idx + 1) + " / " + TOTAL;
+    qText.textContent = q.s;
+    pCur.textContent = idx + 1;
+    var pct = Math.round((idx / TOTAL) * 100);
+    pFill.style.width = pct + "%";
+    pPct.textContent = pct + "%";
+    backBtn.disabled = idx === 0;
+
+    scaleEl.innerHTML = "";
+    SCALE.forEach(function (opt) {
+      var b = document.createElement("button");
+      b.className = "opt" + (answers[idx] === opt.k ? " chosen" : "");
+      b.setAttribute("type", "button");
+      b.innerHTML = '<span class="opt-key">' + opt.k + '</span>' +
+                    '<span>' + opt.label + '</span>' +
+                    '<span class="opt-dot"></span>';
+      b.addEventListener("click", function () { choose(opt.k); });
+      scaleEl.appendChild(b);
+    });
+  }
+
+  function choose(k) {
+    answers[idx] = k;
+    var opts = scaleEl.querySelectorAll(".opt");
+    opts.forEach(function (o, i) { o.classList.toggle("chosen", SCALE[i].k === k); });
+    setTimeout(function () {
+      if (idx < TOTAL - 1) { idx++; renderQuestion(); }
+      else { finish(); }
+    }, 220);
+  }
+
+  backBtn.addEventListener("click", function () {
+    if (idx > 0) { idx--; renderQuestion(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (!document.getElementById("s-quiz").classList.contains("active")) return;
+    if (e.key >= "1" && e.key <= "5") { choose(parseInt(e.key, 10)); }
+    else if (e.key === "Backspace" || e.key === "ArrowLeft") { if (idx > 0) { idx--; renderQuestion(); } }
+  });
+
+  // ---------- Scoring ----------
+  function finish() {
+    pFill.style.width = "100%";
+    pPct.textContent = "100%";
+    var totals = {};
+    for (var t = 1; t <= 9; t++) totals[t] = 0;
+    QUESTIONS.forEach(function (q, i) { totals[q.t] += (answers[i] || 0); });
+
+    var ranked = Object.keys(totals).map(function (t) {
+      return { type: parseInt(t, 10), raw: totals[t] };
+    }).sort(function (a, b) { return b.raw - a.raw || a.type - b.type; });
+
+    var top = ranked[0].type;
+    var left = top === 1 ? 9 : top - 1;
+    var right = top === 9 ? 1 : top + 1;
+    var wing = totals[left] >= totals[right] ? left : right;
+
+    current = { top: top, ranked: ranked, totals: totals, wing: wing, wingLabel: top + "w" + wing, left: left, right: right };
+    renderResults();
+    show("s-results");
+  }
+
+  function pctOf(raw) { return Math.round((raw / MAX_RAW) * 100); }
+
+  // ---------- Results render ----------
+  function renderResults() {
+    var top = current.top, T = TYPES[top];
+
+    document.getElementById("r-num").textContent = "Type " + top;
+    document.getElementById("r-name").textContent = T.name;
+    document.getElementById("r-tag").textContent = T.tag;
+    document.getElementById("r-wing").textContent = "Likely wing · " + current.wingLabel;
+    document.getElementById("r-center").textContent = T.center + " center · " + CENTERS[T.center].members;
+
+    document.getElementById("res-fig").innerHTML = drawEnneagram(top);
+
+    var traitsEl = document.getElementById("r-traits");
+    traitsEl.innerHTML = "";
+    T.traits.forEach(function (tr) {
+      var s = document.createElement("span");
+      s.className = "trait"; s.textContent = tr;
+      traitsEl.appendChild(s);
+    });
+
+    document.getElementById("r-desc").innerHTML = T.desc.map(function (p) { return "<p>" + p + "</p>"; }).join("");
+    document.getElementById("r-best").textContent = T.best;
+    document.getElementById("r-challenge").textContent = T.challenge;
+
+    document.getElementById("r-desire").textContent = T.desire;
+    document.getElementById("r-fear").textContent = T.fear;
+    document.getElementById("r-growth").innerHTML =
+      'You take on the healthy qualities of <span class="arrow">Type ' + T.growth + " · " + TYPES[T.growth].name + "</span>.";
+    document.getElementById("r-stress").innerHTML =
+      'You slip toward the traits of <span class="arrow">Type ' + T.stress + " · " + TYPES[T.stress].name + "</span>.";
+
+    document.getElementById("r-center-name").textContent = "The " + T.center + " Center (Types " + CENTERS[T.center].members + ")";
+    document.getElementById("r-center-blurb").textContent = CENTERS[T.center].blurb;
+
+    var gl = document.getElementById("r-growth-list");
+    gl.innerHTML = "";
+    T.growthPath.forEach(function (g) {
+      var li = document.createElement("li");
+      li.textContent = g;
+      gl.appendChild(li);
+    });
+
+    document.getElementById("r-gloss").innerHTML =
+      '<p><b>Wings.</b> The two types on either side of yours, Type ' + current.left + ' and Type ' + current.right +
+        ', flavor your core type the way a neighboring note colors a chord. You lean toward <b>Type ' + current.wing +
+        '</b>, which gives you the <b>' + current.wingLabel + '</b> blend.</p>' +
+      '<p><b>Arrows.</b> Two lines run out from every type. When you\'re growing, you take on the healthy gifts of Type ' + T.growth +
+        '. When you\'re stressed, you pick up the harder edges of Type ' + T.stress +
+        '. Those are the two gold lines running from your point on the figure above.</p>' +
+      '<p><b>Centers.</b> The nine types group into three centers of intelligence: Body (8·9·1), Heart (2·3·4), and Head (5·6·7). Yours is the <b>' + T.center +
+        ' Center</b>, which sets the underlying emotion your type keeps circling back to: <b>' + CENTERS[T.center].emotion + '</b>.</p>';
+
+    var rankEl = document.getElementById("r-rank");
+    rankEl.innerHTML = "";
+    current.ranked.forEach(function (row) {
+      var pct = pctOf(row.raw);
+      var R = TYPES[row.type];
+      var el = document.createElement("div");
+      el.className = "rank-row" + (row.type === top ? " top" : "");
+      el.innerHTML =
+        '<div class="rank-num">' + row.type + '</div>' +
+        '<div class="rank-body">' +
+          '<div class="rank-name">' + R.name + ' <small>' + R.tag + '</small></div>' +
+          '<div class="bar-track"><div class="bar-fill" data-pct="' + pct + '"></div></div>' +
+        '</div>' +
+        '<div class="rank-pct">' + pct + '%</div>';
+      rankEl.appendChild(el);
+    });
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        rankEl.querySelectorAll(".bar-fill").forEach(function (b) {
+          b.style.width = b.getAttribute("data-pct") + "%";
+        });
+      });
+    });
+  }
+
+  // ---------- Share & download ----------
+  function toast(msg) {
+    var el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(el._timer);
+    el._timer = setTimeout(function () { el.classList.remove("show"); }, 2400);
+  }
+
+  function buildShareText() {
+    var top = current.top, T = TYPES[top];
+    var top3 = current.ranked.slice(0, 3).map(function (r) {
+      return "Type " + r.type + " " + pctOf(r.raw) + "%";
+    }).join("   ·   ");
+    return [
+      "My Enneagram result: Type " + top + " · " + T.name + " (" + current.wingLabel + ")",
+      "“" + T.tag + "”",
+      "",
+      "Core desire: " + T.desire,
+      "In growth I move toward Type " + T.growth + " (" + TYPES[T.growth].name +
+        "); under stress toward Type " + T.stress + " (" + TYPES[T.stress].name + ").",
+      "",
+      "Top three: " + top3,
+      "",
+      "Taken with the Enneagram self-assessment."
+    ].join("\n");
+  }
+
+  function wrap(s, w) {
+    w = w || 76;
+    var words = s.split(" "), line = "", out = [];
+    words.forEach(function (word) {
+      if ((line + " " + word).trim().length > w) { out.push(line.trim()); line = word; }
+      else { line += " " + word; }
+    });
+    if (line.trim()) out.push(line.trim());
+    return out.join("\n");
+  }
+  function barText(p) {
+    var n = Math.round(p / 5), s = "";
+    for (var i = 0; i < 20; i++) s += (i < n ? "█" : "·");
+    return s;
+  }
+  function padTo(s, n) { s = String(s); while (s.length < n) s += " "; return s; }
+
+  function buildReportText() {
+    var top = current.top, T = TYPES[top], L = [];
+    L.push("YOUR ENNEAGRAM RESULT");
+    L.push("=====================");
+    L.push("");
+    L.push("Type " + top + ": " + T.name);
+    L.push(T.tag);
+    L.push("Wing: " + current.wingLabel + "    Center: " + T.center + " (" + CENTERS[T.center].members + ")");
+    L.push("Traits: " + T.traits.join(", "));
+    L.push("");
+    L.push("PORTRAIT");
+    L.push("--------");
+    T.desc.forEach(function (p) { L.push(wrap(p)); L.push(""); });
+    L.push("AT YOUR BEST");
+    L.push("------------");
+    L.push(wrap(T.best)); L.push("");
+    L.push("YOUR CORE CHALLENGE");
+    L.push("-------------------");
+    L.push(wrap(T.challenge)); L.push("");
+    L.push("MOTIVATION & MOVEMENT");
+    L.push("---------------------");
+    L.push("Core desire:   " + T.desire);
+    L.push("Core fear:     " + T.fear);
+    L.push("In growth:     toward Type " + T.growth + " (" + TYPES[T.growth].name + ")");
+    L.push("Under stress:  toward Type " + T.stress + " (" + TYPES[T.stress].name + ")");
+    L.push("");
+    L.push("YOUR CENTER: " + T.center.toUpperCase());
+    L.push("-------------------");
+    L.push(wrap(CENTERS[T.center].blurb)); L.push("");
+    L.push("PATH OF GROWTH");
+    L.push("--------------");
+    T.growthPath.forEach(function (g, i) { L.push(wrap((i + 1) + ". " + g)); });
+    L.push("");
+    L.push("FULL RANKING: ALL NINE TYPES");
+    L.push("------------------------------");
+    current.ranked.forEach(function (r) {
+      var p = pctOf(r.raw);
+      L.push(padTo("Type " + r.type, 8) + padTo(p + "%", 6) + barText(p) + "  " + TYPES[r.type].name);
+    });
+    L.push("");
+    L.push("The Enneagram is a tool for reflection, not a diagnosis. Read the top two or");
+    L.push("three types and notice which core motivation you recognize from the inside.");
+    return L.join("\n");
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function () { toast("Result copied to clipboard"); },
+        function () { legacyCopy(text); }
+      );
+    } else {
+      legacyCopy(text);
+    }
+  }
+  function legacyCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed"; ta.style.top = "0"; ta.style.left = "0"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    toast(ok ? "Result copied to clipboard" : "Couldn't copy automatically. Try Download instead.");
+  }
+
+  document.getElementById("share-btn").addEventListener("click", function () {
+    var text = buildShareText();
+    if (navigator.share) {
+      navigator.share({ title: "My Enneagram Result", text: text }).catch(function () { copyText(text); });
+    } else {
+      copyText(text);
+    }
+  });
+
+  document.getElementById("download-btn").addEventListener("click", function () {
+    var text = buildReportText();
+    try {
+      var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "enneagram-type-" + current.top + "-" + TYPES[current.top].name.toLowerCase().replace(/[^a-z]+/g, "-").replace(/(^-|-$)/g, "") + ".txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      toast("Report downloaded");
+    } catch (e) {
+      copyText(text);
+      toast("Download blocked here, so I copied the report to your clipboard instead");
+    }
+  });
+
+  // ---------- Wire up ----------
+  document.getElementById("hero-fig").innerHTML = drawEnneagram(null);
+
+  document.getElementById("start-btn").addEventListener("click", function () {
+    idx = 0;
+    renderQuestion();
+    show("s-quiz");
+  });
+
+  document.getElementById("retake-btn").addEventListener("click", function () {
+    answers = new Array(TOTAL).fill(null);
+    idx = 0;
+    current = null;
+    document.getElementById("hero-fig").innerHTML = drawEnneagram(null);
+    show("s-intro");
+  });
+})();
+</script>
+
+</body>
+</html>
