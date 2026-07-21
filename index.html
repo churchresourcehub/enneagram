@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="A 72-question Enneagram personality test that maps you to one of the nine types, with your wing, growth and stress directions, center of intelligence, and a full ranked profile.">
+<meta name="description" content="A 72-question Enneagram personality test with a full nine-type library and a relationship explorer showing how any two types connect in health and under stress.">
 <title>The Enneagram: Nine Ways of Seeing</title>
 <style>
   :root {
@@ -69,15 +69,22 @@
 
   /* ---- Masthead ---- */
   header.mast {
-    display: flex; align-items: center; gap: 12px;
-    padding: 22px 0 18px;
+    display: flex; align-items: center; gap: 14px 20px; flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px 0 16px;
     border-bottom: 1px solid var(--line);
   }
+  .mast-brand { display: flex; align-items: center; gap: 12px; background: none; border: none; padding: 0; cursor: pointer; color: inherit; }
   .mast-mark { width: 30px; height: 30px; flex: none; color: var(--accent); }
   .mast-title {
     font-family: var(--mono); font-size: 12px; letter-spacing: .18em;
     text-transform: uppercase; color: var(--muted); font-weight: 500;
   }
+  .mast-nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .navlink { background: none; border: none; cursor: pointer; font-family: var(--sans); font-size: 13.5px; font-weight: 500; color: var(--muted); padding: 7px 12px; border-radius: 999px; transition: color .15s ease, background .15s ease; }
+  .navlink:hover { color: var(--ink); }
+  .navlink.active { color: var(--accent); background: var(--accent-wash); }
+  .navlink:focus-visible, .mast-brand:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
 
   section.screen { padding: 40px 0 72px; display: none; }
   section.screen.active { display: block; animation: fade .5s ease both; }
@@ -248,6 +255,37 @@
 
   footer.foot { border-top: 1px solid var(--line); padding: 26px 0 40px; text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
 
+  /* ---- Library & relationships ---- */
+  .page-title { font-family: var(--serif); font-weight: 600; font-size: clamp(1.9rem,5.5vw,2.6rem); letter-spacing: -0.02em; text-align: center; text-wrap: balance; margin: 0 0 8px; }
+  .page-sub { text-align: center; color: var(--muted); max-width: 52ch; margin: 0 auto 32px; }
+  .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 640px) { .type-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px) { .type-grid { grid-template-columns: 1fr; } }
+  .type-card { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; cursor: pointer; display: flex; flex-direction: column; gap: 3px; transition: transform .15s ease, border-color .15s ease, box-shadow .2s ease; color: var(--ink); font-family: var(--sans); }
+  .type-card:hover { transform: translateY(-3px); border-color: var(--accent-soft); box-shadow: var(--shadow); }
+  .type-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tc-num { font-family: var(--serif); font-size: 2rem; font-weight: 600; color: var(--accent); line-height: 1; }
+  .tc-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; margin-top: 2px; }
+  .tc-tag { color: var(--muted); font-size: 13.5px; }
+  .tc-center { margin-top: 8px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .back-wide { display: inline-flex; margin-bottom: 6px; font-size: 14px; }
+
+  .pair-pickers { display: flex; align-items: flex-end; justify-content: center; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+  .pair-pickers label { display: flex; flex-direction: column; gap: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .pair-pickers .plus { align-self: center; color: var(--accent); font-size: 20px; padding-bottom: 9px; }
+  select.enn-select { appearance: none; -webkit-appearance: none; background-color: var(--surface); border: 1px solid var(--line-strong); color: var(--ink); font-family: var(--sans); font-size: 15px; font-weight: 500; padding: 10px 36px 10px 14px; border-radius: 10px; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%), linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+    background-position: calc(100% - 19px) 19px, calc(100% - 14px) 19px; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; }
+  select.enn-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .pair-head { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 26px; }
+  .pair-badge { font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--accent); background: var(--accent-wash); border: 1px solid var(--accent-soft); border-radius: 12px; padding: 6px 16px; }
+  .pair-plus { color: var(--muted); font-size: 18px; }
+  .pair-names { text-align: center; font-family: var(--serif); font-style: italic; color: var(--muted); font-size: 1.1rem; margin: 8px 0 4px; }
+
+  .rel-inline { text-align: center; margin: 6px auto 4px; }
+  .rel-inline label { display: inline-flex; align-items: center; gap: 8px 10px; flex-wrap: wrap; justify-content: center; color: var(--muted); font-size: 15px; }
+  .rel-inline b { color: var(--accent); }
+
   /* enneagram svg element styling */
   .enn-ring { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
   .enn-web { fill: none; stroke: var(--line-strong); stroke-width: 1.2; }
@@ -261,12 +299,19 @@
 <body>
 <div class="wrap">
   <header class="mast">
-    <svg class="mast-mark" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="3"/>
-      <polygon points="50,10 78,74 22,74" fill="none" stroke="currentColor" stroke-width="3"/>
-      <polygon points="50,10 84,42 71,84 29,84 16,42" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>
-    </svg>
-    <span class="mast-title">A Map of Nine Types</span>
+    <button class="mast-brand" data-nav="intro" type="button" aria-label="Home">
+      <svg class="mast-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="3"/>
+        <polygon points="50,10 78,74 22,74" fill="none" stroke="currentColor" stroke-width="3"/>
+        <polygon points="50,10 84,42 71,84 29,84 16,42" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/>
+      </svg>
+      <span class="mast-title">A Map of Nine Types</span>
+    </button>
+    <nav class="mast-nav">
+      <button class="navlink" data-nav="intro" type="button">The Test</button>
+      <button class="navlink" data-nav="library" type="button">Explore the Types</button>
+      <button class="navlink" data-nav="relationships" type="button">Type Pairs</button>
+    </nav>
   </header>
 
   <!-- INTRO -->
@@ -355,12 +400,52 @@
     <div class="section-label">All nine types, ranked</div>
     <div class="rank" id="r-rank"></div>
 
+    <div class="section-label">How you connect with the other types</div>
+    <div class="rel-inline">
+      <label>See your Type <b id="rel-my-num">—</b> alongside
+        <select id="res-rel-select" class="enn-select" aria-label="Choose another type"></select>
+      </label>
+    </div>
+    <div id="res-rel-output"></div>
+    <div class="center" style="margin-top: 22px;">
+      <button class="btn btn-ghost" id="res-rel-explore" type="button">Explore all pairings</button>
+    </div>
+
     <p class="disclaimer">The Enneagram is a mirror for reflection, not a diagnosis. A questionnaire can only point in a direction. The surest way to find your type is to read the two or three that scored highest and notice which core motivation you recognize from the inside.</p>
     <div class="res-actions">
       <button class="btn btn-primary" id="share-btn">Share result</button>
       <button class="btn btn-ghost" id="download-btn">Download report</button>
       <button class="btn btn-ghost" id="retake-btn">Take it again</button>
     </div>
+  </section>
+
+  <!-- LIBRARY -->
+  <section class="screen" id="s-library">
+    <div id="lib-grid-view">
+      <h2 class="page-title">Explore the Nine Types</h2>
+      <p class="page-sub">Read any type in full, whether or not you've taken the test. Each one carries its own motivation and its own blind spot.</p>
+      <div class="type-grid" id="type-grid"></div>
+    </div>
+    <div id="lib-detail-view" hidden>
+      <button class="link-btn back-wide" id="lib-back" type="button">← All types</button>
+      <div id="lib-detail"></div>
+    </div>
+  </section>
+
+  <!-- RELATIONSHIPS -->
+  <section class="screen" id="s-relationships">
+    <h2 class="page-title">How the Types Pair</h2>
+    <p class="page-sub">Pick any two types to see how they tend to connect at their best, and where the relationship strains when each one is under pressure.</p>
+    <div class="pair-pickers">
+      <label>First type
+        <select id="rel-a" class="enn-select"></select>
+      </label>
+      <span class="plus">+</span>
+      <label>Second type
+        <select id="rel-b" class="enn-select"></select>
+      </label>
+    </div>
+    <div id="rel-output"></div>
   </section>
 
   <footer class="foot">Enneagram Self-Assessment · For reflection, not diagnosis</footer>
@@ -488,6 +573,55 @@
         "Name what you want in a situation before you default to what everyone else wants.",
         "Take on one small tension head-on instead of smoothing it over.",
         "Catch yourself drifting, pick one thing that matters, and move on it." ] }
+  };
+
+  // Relationship dynamics for all 45 unique pairings, keyed "min-max".
+  var PAIRS = {
+    "1-1": { health: "Two Ones share a language of standards and conscience, and they can build something careful and principled together. Each trusts the other to carry their share and to do it right.", stress: "The trouble starts when both inner critics get loud at once. Small flaws turn into mutual correction, and the anger they each swallow can settle into a cold, tense standoff." },
+    "1-2": { health: "The One brings order and principle and the Two brings warmth and care, so together they look after people well. The Two softens the One's edges, and the One gives the Two's giving a steady shape.", stress: "Under strain the One turns critical and the Two turns to guilt and unspoken need. The One can feel smothered, and the Two can feel judged for the very help they offered." },
+    "1-3": { health: "Both are driven and capable and can accomplish a great deal, the One aiming for what's right and the Three for what works. They respect each other's discipline.", stress: "Friction rises when the One wants it correct and the Three wants it done and admired. The One reads the Three as cutting corners for image, and the Three reads the One as slowing everything down." },
+    "1-4": { health: "The One and the Four both care about integrity and depth, and each helps the other hold high ideals with real feeling. The Four brings color to the One's structure, and the One brings ground to the Four's intensity.", stress: "This is a charged pair, since the One moves to Four under stress and can meet the Four in a spiral of criticism and gloom. The One judges the Four as self-indulgent, and the Four feels the One's correction as rejection." },
+    "1-5": { health: "Both value competence and doing things properly, and they give each other room to think and work with care. The Five appreciates the One's principle, and the One trusts the Five's thoroughness.", stress: "Strain shows up as two people retreating into their heads, the One into rules and the Five into distance. Warmth gets scarce, and neither reaches across the growing gap." },
+    "1-6": { health: "The One and the Six are both responsible and want to do right by others, so together they are dependable and loyal. They take duty seriously and cover each other.", stress: "Under pressure both get anxious and reactive, the One certain and the Six doubting. The One's insistence can spike the Six's worry, and the Six's second-guessing can fray the One's patience." },
+    "1-7": { health: "This is the growth line for the One, so the Seven's lightness can genuinely free them, and the One's structure gives the Seven's ideas somewhere to land. Together they balance discipline with joy.", stress: "The old tension is freedom versus finished. The Seven wants fun and options and the One wants it correct, so the One reads the Seven as irresponsible and the Seven feels boxed in by the One's rules." },
+    "1-8": { health: "Both are direct and unafraid to stand for something, so this pair can move mountains once they agree. Each respects the other's backbone.", stress: "When they clash it becomes a battle of wills, the One armed with principle and the Eight with force. Anger runs hot in both, and neither backs down easily." },
+    "1-9": { health: "The One brings direction and the Nine brings calm, and the Nine's ease softens the One's intensity while the One helps the Nine act. They can be steady and grounded together.", stress: "Both sit in the anger center but handle it in opposite ways, the One pressing and the Nine going passive. The more the One corrects, the more the Nine stonewalls and quietly withdraws." },
+    "2-2": { health: "Two Helpers pour warmth into each other and into everyone around them, and few pairs are as attentive and generous. When it flows, each one feels deeply cared for.", stress: "The catch is that both give and neither asks. Needs stay unspoken on both sides until the hurt builds, and the giving turns into a quiet contest over who has done more." },
+    "2-3": { health: "The Two and the Three both read people well and know how to win them over, so together they make a warm and well-liked pair. The Two supports and the Three shines.", stress: "Under strain the Two needs to feel loved and the Three needs to feel admired, and image can crowd out honesty. The Two feels used, and the Three feels the Two's needs as a drag on momentum." },
+    "2-4": { health: "This is the Two's growth line, and the Four's emotional honesty invites the Two toward their own feelings. Both are warm and relational and can share real depth.", stress: "The strain is over need and attention. The Four wants to be understood and the Two wants to be appreciated, and each can feel the other isn't giving back what they gave." },
+    "2-5": { health: "The Two brings warmth and the Five brings depth and space, so the Two can coax the Five out while the Five offers the Two a calm, thoughtful presence. Their difference can be complementary.", stress: "Their instincts pull opposite ways, the Two toward closeness and the Five toward retreat. The more the Two reaches, the more the Five pulls back, and both end up feeling unmet." },
+    "2-6": { health: "Both are loyal and devoted to the people they love, so this pair can be a warm, committed team that shows up for others. Trust and care run deep.", stress: "Under pressure the Two's need and the Six's anxiety feed each other. The Six questions whether the Two's care is real, and the Two feels wounded by the doubt." },
+    "2-7": { health: "The Two's warmth and the Seven's energy make a bright, generous pair that others love to be near. The Seven keeps things fun and the Two keeps things kind.", stress: "The friction is around need and freedom. The Two wants closeness and reassurance, and the Seven, dodging anything heavy, slips off toward the next thing just as the Two reaches for depth." },
+    "2-8": { health: "The Two and the Eight are a classic protective pair, the Eight guarding and the Two nurturing. The Eight makes the Two feel safe, and the Two softens the Eight's heart.", stress: "This is the Two's stress line, so under pressure the Two can turn blunt and demanding to match the Eight. Power struggles flare, and the Two's hidden needs come out as force." },
+    "2-9": { health: "Both are gentle and accommodating, and both want to keep others comfortable, so the pair is easy and warm. Conflict is rare and kindness is steady.", stress: "The problem is that neither says what they need. The Two over-gives and the Nine goes along, and real wants stay buried until quiet resentment seeps in on both sides." },
+    "3-3": { health: "Two Threes are a powerhouse, efficient and ambitious and good at making things happen and look good. They admire and push each other.", stress: "The risk is two performers who never take the mask off. Competition creeps in, feelings get shelved for the win, and neither is sure the other loves the real person underneath." },
+    "3-4": { health: "The Three brings drive and the Four brings depth, and each has what the other lacks. They can genuinely help each other become more whole.", stress: "The strain runs deep, since the Three chases image and the Four chases the real. The Four sees the Three as shallow, and the Three sees the Four as stuck in feeling." },
+    "3-5": { health: "The Three and the Five both prize competence, so together they can be sharp and effective, the Three driving toward results and the Five toward understanding. Each respects the other's mastery.", stress: "Their pace and values split under pressure. The Three wants speed and recognition and the Five wants time and depth, and the Three's push only makes the Five withdraw further." },
+    "3-6": { health: "This is the Three's growth line, and the Six's loyalty and honesty can ground the Three in something real. Together they can be committed and hardworking.", stress: "The friction is trust. The Six probes for what's genuine and the Three, wanting to look good, can seem evasive, which deepens the Six's suspicion." },
+    "3-7": { health: "Both are upbeat and future-focused, so this pair brings a lot of energy and optimism to whatever they build. They keep each other moving and inspired.", stress: "The shared weakness is avoiding hard feelings. The Three buries them in work and the Seven in fun, and real intimacy gets skated over by two people who stay busy and bright." },
+    "3-8": { health: "The Three and the Eight are both decisive and results-driven, so together they can lead and get big things done. Each admires the other's power.", stress: "When they clash it's over control and truth. The Eight wants it real and direct, and the Three's image-management can strike the Eight as slippery, which the Eight will call out hard." },
+    "3-9": { health: "This is the Three's stress line and the Nine's growth line, so there's a real link between them. The Nine's ease can calm the driven Three, and the Three can help the Nine step forward.", stress: "Their rhythms collide, the Three pushing for more and the Nine drifting toward rest. The Three can steamroll the Nine, and the Nine can quietly stall the Three's momentum." },
+    "4-4": { health: "Two Fours share a depth and honesty about feeling that few others reach, and they can hold each other's inner worlds. It can be a profound connection.", stress: "The danger is two people caught in longing and mood at the same time. Envy and comparison turn inward, and each can decide the other doesn't really understand after all." },
+    "4-5": { health: "The Four and the Five both live in a rich inner world and value depth over surface, so they can go deep together and still give each other space. The understanding runs quiet and real.", stress: "The strain is emotional temperature. The Four wants feeling met and the Five withdraws to think, so the Four reads the Five's distance as coldness while the Five feels flooded." },
+    "4-6": { health: "Both feel things intensely and care about loyalty and truth, so this pair can be devoted and emotionally honest. Each takes the other's inner life seriously.", stress: "Under pressure the Four's intensity and the Six's anxiety amplify each other. Doubt and drama can spiral, and both start bracing for the relationship to fail." },
+    "4-7": { health: "The Four brings depth and the Seven brings lightness, and each can rescue the other, the Seven lifting the Four's mood and the Four giving the Seven's fun some soul. Real balance is possible.", stress: "Their coping styles are opposites, the Four sinking into pain and the Seven fleeing it. When the Four goes down, the Seven bolts, and the Four feels abandoned in the exact moment they needed presence." },
+    "4-8": { health: "The Four and the Eight are both intense and unafraid of the deep end, so there's real passion and honesty possible here. Each respects the other's refusal to fake it.", stress: "This can get stormy fast, the Four flooded with feeling and the Eight pushing back with force. The Eight can trample the Four's sensitivity, and the Four can read the Eight as brutal." },
+    "4-9": { health: "The Four brings depth and the Nine brings acceptance, so the Nine's steady ease can be a safe harbor for the Four's storms. The Nine feels seen and the Four feels held.", stress: "The friction is over engagement. The Four wants intensity and the Nine wants calm, so the Four can feel the Nine check out, and the Nine can feel worn down by the Four's waves." },
+    "5-5": { health: "Two Fives give each other exactly what they crave, plenty of space and no pressure, and they can trade ideas freely. It's a calm, mutually understanding bond.", stress: "The risk is two people who both withdraw and neither reaches. Distance grows comfortable, feeling goes unspoken, and the connection can quietly starve for lack of contact." },
+    "5-6": { health: "The Five brings analysis and the Six brings loyalty and vigilance, so together they think carefully and cover each other's blind spots. Once built, the trust is solid.", stress: "Under strain the Five detaches and the Six escalates, wanting reassurance the Five isn't giving. The Six's need for contact meets the Five's need for space, and both feel let down." },
+    "5-7": { health: "This is the Five's stress line and the Seven's growth line, and they balance each other well, the Seven pulling the Five out and the Five giving the Seven depth. Both are curious and love ideas.", stress: "The pace splits them, the Seven wanting more and the Five wanting less. The Seven can overwhelm the Five, and the Five can bore or frustrate the restless Seven." },
+    "5-8": { health: "This is the Five's growth line, and the Eight's directness and drive can pull the Five into life and action. The Five gives the Eight thoughtfulness and the Eight gives the Five nerve.", stress: "The clash is intensity. The Eight wants engagement and confrontation, and the Five withdraws to think, which the Eight reads as evasion and pushes against harder." },
+    "5-9": { health: "Both are low-key and content with quiet, so this is a peaceful, unpressured pair that respects each other's inner world. There's little friction and easy company.", stress: "The very ease is the risk. The Five withdraws and the Nine goes passive, and with neither one driving, the relationship can drift into distance and low energy without anyone noticing." },
+    "6-6": { health: "Two Sixes understand each other's need for security and loyalty, and they can build real trust and a united front. Devotion runs deep.", stress: "The problem is two anxious minds feeding each other's worst cases. Doubt and worry bounce back and forth, and the pair can talk each other into fears neither would reach alone." },
+    "6-7": { health: "The Six brings caution and the Seven brings optimism, so each tempers the other, the Seven lightening the Six's worry and the Six grounding the Seven's plans. It's a useful balance.", stress: "Under strain the Six wants commitment and reassurance and the Seven wants freedom and options. The Six reads the Seven as unreliable, and the Seven feels weighed down by the Six's fear." },
+    "6-8": { health: "The Six and the Eight are both loyal and protective, so once trust is set this is a strong, steady alliance. The Eight brings a certainty the Six can lean on.", stress: "The strain is around power and doubt. The Eight pushes hard and the Six pushes back or freezes, so the Eight's force can trigger the Six's fear while the Six's questioning wears on the Eight." },
+    "6-9": { health: "This is the Six's growth line, and the Nine's calm can settle the Six's anxious mind. Both are loyal and warm, and together they can be gentle and steady.", stress: "The shared trouble is avoidance and inertia. The Six frets and the Nine numbs, so problems go unaddressed while both hope the tension will simply pass." },
+    "7-7": { health: "Two Sevens are pure momentum, full of plans and adventures and rarely bored. Life together is bright and busy.", stress: "The shared blind spot is pain. Neither wants to slow down for the hard stuff, so difficulty gets outrun instead of faced, and the depth they both secretly want stays out of reach." },
+    "7-8": { health: "The Seven and the Eight are both bold and full of appetite, so together they go after life hard. Energy and confidence are never in short supply.", stress: "When they collide, the Eight wants control and the Seven wants freedom. The Eight feels the Seven slip away from commitment, and the Seven feels cornered by the Eight's force." },
+    "7-9": { health: "Both are easygoing and pleasant, so this pair keeps things light and comfortable, the Seven adding spark and the Nine adding calm. It's good-natured company.", stress: "The shared weakness is facing hard things. The Seven distracts and the Nine numbs, so conflict gets avoided by both and real issues quietly pile up." },
+    "8-8": { health: "Two Eights respect strength and straight talk, and there's no game-playing here, just two people who say what they mean and protect their own. It can be fiercely loyal.", stress: "The risk is two immovable forces. Neither shows weakness or backs down, so a clash can escalate into a contest where winning matters more than the bond." },
+    "8-9": { health: "The Eight brings force and the Nine brings calm, so the Nine's steadiness can soothe the Eight while the Eight helps the Nine find their edge. Both sit in the body center and can feel at home together.", stress: "The dynamic can go lopsided, the Eight asserting and the Nine yielding. The Eight can overpower the Nine, and the Nine can resist by going quiet and immovable, which frustrates the Eight." },
+    "9-9": { health: "Two Nines create a deeply peaceful, comfortable world together, easy and accepting, with almost no conflict. It's a gentle, harmonious bond.", stress: "The very peace is the trap. Neither asserts and neither decides, so the relationship can drift for years while real needs and problems stay politely unmentioned." }
   };
 
   // 8 statements per type, keyed by type
@@ -646,6 +780,10 @@
     var scr = document.querySelectorAll(".screen");
     for (var i = 0; i < scr.length; i++) scr[i].classList.remove("active");
     document.getElementById(id).classList.add("active");
+    var navMap = { "s-intro": "intro", "s-library": "library", "s-relationships": "relationships" };
+    document.querySelectorAll(".navlink").forEach(function (b) {
+      b.classList.toggle("active", navMap[id] === b.getAttribute("data-nav"));
+    });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -802,6 +940,19 @@
         });
       });
     });
+
+    // relationships picker on the results page
+    var relSel = document.getElementById("res-rel-select");
+    document.getElementById("rel-my-num").textContent = top;
+    relSel.innerHTML = "";
+    for (var rt = 1; rt <= 9; rt++) {
+      if (rt === top) continue;
+      var ro = document.createElement("option");
+      ro.value = rt; ro.textContent = "Type " + rt + " · " + TYPES[rt].name;
+      relSel.appendChild(ro);
+    }
+    relSel.value = (top === 1 ? 2 : 1);
+    renderPair(top, parseInt(relSel.value, 10), document.getElementById("res-rel-output"));
   }
 
   // ---------- Share & download ----------
@@ -943,8 +1094,144 @@
     }
   });
 
+  // ---------- Library & relationships ----------
+  function pairKey(a, b) { return [a, b].sort(function (x, y) { return x - y; }).join("-"); }
+
+  function renderPair(a, b, container) {
+    var p = PAIRS[pairKey(a, b)];
+    if (!p) { container.innerHTML = ""; return; }
+    var A = TYPES[a], B = TYPES[b];
+    container.innerHTML =
+      '<div class="pair-head"><span class="pair-badge">Type ' + a + '</span><span class="pair-plus">+</span><span class="pair-badge">Type ' + b + '</span></div>' +
+      '<div class="pair-names">' + A.name + (a === b ? " with itself" : " &amp; " + B.name) + '</div>' +
+      '<div class="prose-block"><div class="pb-label">Together at their best</div><p>' + p.health + '</p></div>' +
+      '<div class="prose-block challenge"><div class="pb-label">Where it strains</div><p>' + p.stress + '</p></div>';
+  }
+
+  function typeProfileHTML(n) {
+    var T = TYPES[n];
+    var traits = T.traits.map(function (t) { return '<span class="trait">' + t + '</span>'; }).join("");
+    var portrait = T.desc.map(function (p) { return "<p>" + p + "</p>"; }).join("");
+    var growth = T.growthPath.map(function (g) { return "<li>" + g + "</li>"; }).join("");
+    return '' +
+      '<div class="res-head">' +
+        '<div class="res-eyebrow">Type profile</div>' +
+        '<div class="res-type-num">Type ' + n + '</div>' +
+        '<h2 class="res-name">' + T.name + '</h2>' +
+        '<p class="res-tagline">' + T.tag + '</p>' +
+        '<div class="pill-row"><span class="res-wing alt">' + T.center + ' center · ' + CENTERS[T.center].members + '</span></div>' +
+      '</div>' +
+      '<div class="res-figure">' + drawEnneagram(n) + '</div>' +
+      '<div class="traits">' + traits + '</div>' +
+      '<div class="res-body">' + portrait + '</div>' +
+      '<div class="prose-block"><div class="pb-label">At their best</div><p>' + T.best + '</p></div>' +
+      '<div class="prose-block challenge"><div class="pb-label">The core challenge</div><p>' + T.challenge + '</p></div>' +
+      '<div class="card-grid">' +
+        '<div class="info-card"><div class="lab">Core desire</div><div class="val">' + T.desire + '</div></div>' +
+        '<div class="info-card"><div class="lab">Core fear</div><div class="val">' + T.fear + '</div></div>' +
+        '<div class="info-card"><div class="lab">In growth</div><div class="val">Toward <span class="arrow">Type ' + T.growth + ' · ' + TYPES[T.growth].name + '</span></div></div>' +
+        '<div class="info-card"><div class="lab">Under stress</div><div class="val">Toward <span class="arrow">Type ' + T.stress + ' · ' + TYPES[T.stress].name + '</span></div></div>' +
+      '</div>' +
+      '<div class="section-label">Center of intelligence</div>' +
+      '<div class="center-card"><div class="cc-name">The ' + T.center + ' Center (Types ' + CENTERS[T.center].members + ')</div><p>' + CENTERS[T.center].blurb + '</p></div>' +
+      '<div class="section-label">Path of growth</div>' +
+      '<ul class="growth-list">' + growth + '</ul>' +
+      '<div class="center" style="margin-top: 28px;"><button class="btn btn-ghost" data-pairfor="' + n + '" type="button">See how Type ' + n + ' pairs with others</button></div>';
+  }
+
+  function renderTypeGrid() {
+    var grid = document.getElementById("type-grid");
+    grid.innerHTML = "";
+    for (var n = 1; n <= 9; n++) {
+      var T = TYPES[n];
+      var card = document.createElement("button");
+      card.className = "type-card";
+      card.setAttribute("type", "button");
+      card.setAttribute("data-typecard", n);
+      card.innerHTML =
+        '<span class="tc-num">' + n + '</span>' +
+        '<span class="tc-name">' + T.name + '</span>' +
+        '<span class="tc-tag">' + T.tag + '</span>' +
+        '<span class="tc-center">' + T.center + ' center</span>';
+      grid.appendChild(card);
+    }
+  }
+
+  function resetLibrary() {
+    document.getElementById("lib-grid-view").hidden = false;
+    document.getElementById("lib-detail-view").hidden = true;
+  }
+  function openTypeDetail(n) {
+    document.getElementById("lib-detail").innerHTML = typeProfileHTML(n);
+    document.getElementById("lib-grid-view").hidden = true;
+    document.getElementById("lib-detail-view").hidden = false;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function populateTypeSelect(sel) {
+    sel.innerHTML = "";
+    for (var n = 1; n <= 9; n++) {
+      var o = document.createElement("option");
+      o.value = n; o.textContent = "Type " + n + " · " + TYPES[n].name;
+      sel.appendChild(o);
+    }
+  }
+  var relInited = false;
+  function relRender() {
+    renderPair(
+      parseInt(document.getElementById("rel-a").value, 10),
+      parseInt(document.getElementById("rel-b").value, 10),
+      document.getElementById("rel-output"));
+  }
+  function ensureRelInit() {
+    if (relInited) return;
+    var a = document.getElementById("rel-a"), b = document.getElementById("rel-b");
+    populateTypeSelect(a); populateTypeSelect(b);
+    a.value = 1; b.value = 2;
+    a.addEventListener("change", relRender);
+    b.addEventListener("change", relRender);
+    relInited = true;
+    relRender();
+  }
+  function openRelationships(a, b) {
+    ensureRelInit();
+    if (a) document.getElementById("rel-a").value = a;
+    if (b && b !== a) document.getElementById("rel-b").value = b;
+    else if (parseInt(document.getElementById("rel-b").value, 10) === a) document.getElementById("rel-b").value = (a === 1 ? 2 : 1);
+    relRender();
+    show("s-relationships");
+  }
+
   // ---------- Wire up ----------
   document.getElementById("hero-fig").innerHTML = drawEnneagram(null);
+  renderTypeGrid();
+
+  document.querySelectorAll("[data-nav]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var t = b.getAttribute("data-nav");
+      if (t === "intro") { show("s-intro"); }
+      else if (t === "library") { resetLibrary(); show("s-library"); }
+      else if (t === "relationships") { ensureRelInit(); show("s-relationships"); }
+    });
+  });
+
+  document.addEventListener("click", function (e) {
+    var card = e.target.closest ? e.target.closest("[data-typecard]") : null;
+    if (card) { openTypeDetail(parseInt(card.getAttribute("data-typecard"), 10)); return; }
+    var pf = e.target.closest ? e.target.closest("[data-pairfor]") : null;
+    if (pf) { openRelationships(parseInt(pf.getAttribute("data-pairfor"), 10)); }
+  });
+
+  document.getElementById("lib-back").addEventListener("click", resetLibrary);
+
+  document.getElementById("res-rel-select").addEventListener("change", function () {
+    if (!current) return;
+    renderPair(current.top, parseInt(this.value, 10), document.getElementById("res-rel-output"));
+  });
+  document.getElementById("res-rel-explore").addEventListener("click", function () {
+    if (!current) return;
+    openRelationships(current.top, parseInt(document.getElementById("res-rel-select").value, 10));
+  });
 
   document.getElementById("start-btn").addEventListener("click", function () {
     idx = 0;
